@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Creditor Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fa;
+  color: #111827;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.1);
+  padding: 1rem 3rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1e40af;
+  margin: 0;
+}
+
+header p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 1rem;
+}
+
+button#logoutBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button#logoutBtn:hover {
+  background-color: #1e40af;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 2rem 3rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
+  font-size: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(30, 64, 175, 0.2);
+}
+
+.card h2 {
+  margin: 0;
+  margin-bottom: 0.75rem;
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.card .value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 3rem 1rem;
+}
+
+.tabs button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: #e0e7ff;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e40af;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tabs button:hover {
+  background-color: #c7d2fe;
+}
+
+.tabs button.active {
+  background-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+}
+
+.section {
+  display: none;
+  padding: 2rem 3rem;
+}
+
+.section.active {
+  display: block;
+}
+
+.panel {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.loan-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.status.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status.confirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #111827;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-draft {
+  background-color: #e0e7ff;
+  color: #1e40af;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-draft:hover {
+  background-color: #c7d2fe;
+}
+
+.btn-submit {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #1e40af;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Creditor Dashboard</h1>
+    <p>HDFC Bank Ltd - Manage loan records and track verification status</p>
+    <button id="logoutBtn" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 8px; background: #2563eb; color: white; cursor: pointer;">Logout</button>
+  </header>
+
+  <div class="dashboard">
+    <div class="card"><h2>Total Submissions</h2><div class="value">24</div></div>
+    <div class="card"><h2>Pending Confirmation</h2><div class="value">5</div></div>
+    <div class="card"><h2>Confirmed Records</h2><div class="value">18</div></div>
+    <div class="card"><h2>Total Exposure</h2><div class="value">₹2.4K Cr</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="active" onclick="switchTab('overview')">Overview</button>
+    <button onclick="switchTab('smart')">Smart Contract</button>
+    <button onclick="switchTab('records')">Submitted Records</button>
+  </div>
+
+  <!-- Overview Section -->
+  <div id="overview" class="section active">
+    <div class="panel">
+      <h3>Recent Activity</h3>
+      <div class="loan-item"><div>Reliance Capital Ltd<br/>₹500 Crore</div><div class="status pending">Pending</div></div>
+      <div class="loan-item"><div>Jet Airways India Ltd<br/>₹250 Crore</div><div class="status confirmed">Confirmed</div></div>
+      <div class="loan-item"><div>Videocon Industries Ltd<br/>₹800 Crore</div><div class="status rejected">Rejected</div></div>
+    </div>
+    <div class="panel">
+      <h3>Pending Actions</h3>
+      <div class="loan-item">Loan Expiring Soon<br/><small>Reliance Capital - Due in 3 days</small></div>
+      <div class="loan-item">Monthly Report Ready<br/><small>December 2024 compliance report</small></div>
+    </div>
+  </div>
+
+  <!-- Smart Contract Form Section -->
+  <div id="smart" class="section">
+    <div class="panel">
+      <h3>+ Submit New Loan Record</h3>
+      <p>Record new loan and financial data on the blockchain for borrower verification</p>
+      <div class="form-group">
+        <label>Borrower Name *</label>
+        <input type="text" placeholder="e.g., Reliance Capital Ltd">
+      </div>
+      <div class="form-group">
+        <label>Loan Amount *</label>
+        <input type="text" placeholder="e.g., ₹500 Crore">
+      </div>
+      <div class="form-group">
+        <label>Loan Start Date *</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Maturity Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Current Loan Status</label>
+        <select>
+          <option>Select loan status</option>
+          <option>Active</option>
+          <option>Defaulted</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Asset Records</label>
+        <textarea placeholder="Describe assets, collateral, etc."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Balance Sheet Summary</label>
+        <textarea placeholder="Total assets, liabilities, equity details..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Existing Liabilities</label>
+        <textarea placeholder="Other outstanding loans, obligations..."></textarea>
+      </div>
+      <div class="form-buttons">
+        <button class="btn-draft">Save as Draft</button>
+        <button class="btn-submit">Submit to Blockchain</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submitted Records Section -->
+  <div id="records" class="section">
+    <div class="panel">
+      <h3>Submitted Loan Records</h3>
+      <p>Track status of all your submitted loan records</p>
+      <div class="loan-item" data-status="pending">
+        <div>
+          <strong>Reliance Capital Ltd</strong><br/>
+          Transaction ID: TXN001<br/>
+          Amount <strong>₹500 Crore</strong><br/>
+          Submitted <strong>2024-01-15</strong><br/>
+          Expires <strong>2024-01-29</strong>
+        </div>
+        <div>
+          <span class="status pending">Pending Confirmation</span><br/>
+        </br>
+          <button class="view-details-btn" style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+      <div class="loan-item" data-status="confirmed">
+        <div>
+          <strong>Jet Airways India Ltd</strong><br/>
+          Transaction ID: TXN002<br/>
+          Amount <strong>₹250 Crore</strong><br/>
+          Submitted <strong>2024-01-10</strong><br/>
+          Confirmed <strong>2024-01-12</strong>
+        </div>
+        <div>
+          <span class="status confirmed">Confirmed</span><br/>
+        </br>
+          <button class="view-details-btn" style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+      <div class="loan-item" data-status="rejected">
+        <div>
+          <strong>Videocon Industries Ltd</strong><br/>
+          Transaction ID: TXN003<br/>
+          Amount <strong>₹800 Crore</strong><br/>
+          Submitted <strong>2024-01-08</strong><br/>
+          Rejected <strong>2024-01-11</strong>
+        </div>
+        <div>
+          <span class="status rejected">Rejected</span><br/>
+          </br>
+          <button class="view-details-btn" style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Add event listeners to "View Details" buttons to mark record as confirmed
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('.view-details-btn');
+      buttons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const loanItem = event.target.closest('.loan-item');
+          if (loanItem) {
+            // Update status visually to confirmed
+            loanItem.dataset.status = 'confirmed';
+            const statusSpan = loanItem.querySelector('.status');
+            statusSpan.textContent = 'Confirmed';
+            statusSpan.className = 'status confirmed';
+          }
+        });
+      });
+
+      // Check login state and role
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      if (!loggedInUser || loggedInUser.role !== 'Creditor') {
+        alert('Unauthorized access. Please login as Creditor.');
+        window.location.href = 'index.html';
+      }
+
+      // Logout button
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('loggedInUser');
+        window.location.href = 'index.html';
+      });
+    });
+
+    // Handle submit to blockchain button click
+    document.querySelector('.btn-submit').addEventListener('click', (event) => {
+      event.preventDefault();
+
+      // Collect form data
+      const form = event.target.closest('.panel');
+      const borrowerName = form.querySelector('input[placeholder^="e.g.,"]').value.trim();
+      const loanAmount = form.querySelector('input[placeholder*="₹"]').value.trim();
+      const loanStartDate = form.querySelector('input[type="date"]').value;
+      const maturityDate = form.querySelectorAll('input[type="date"]')[1].value;
+      const loanStatus = form.querySelector('select').value;
+      const assetRecords = form.querySelector('textarea[placeholder*="assets"]').value.trim();
+      const balanceSheet = form.querySelector('textarea[placeholder*="Total assets"]').value.trim();
+      const existingLiabilities = form.querySelector('textarea[placeholder*="outstanding"]').value.trim();
+
+      // Basic validation
+      if (!borrowerName || !loanAmount || !loanStartDate || loanStatus === 'Select loan status') {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Create new loan record element
+      const newRecord = document.createElement('div');
+      newRecord.className = 'loan-item';
+      newRecord.setAttribute('data-status', 'pending');
+      newRecord.innerHTML = `
+        <div>
+          <strong>${borrowerName}</strong><br/>
+          Transaction ID: TXN${Date.now()}<br/>
+          Amount <strong>${loanAmount}</strong><br/>
+          Submitted <strong>${new Date().toISOString().split('T')[0]}</strong><br/>
+          Maturity Date: <strong>${maturityDate || 'N/A'}</strong><br/>
+          Status: <strong>${loanStatus}</strong><br/>
+          Asset Records: ${assetRecords}<br/>
+          Balance Sheet Summary: ${balanceSheet}<br/>
+          Existing Liabilities: ${existingLiabilities}
+        </div>
+        <div>
+          <span class="status pending">Pending Confirmation</span><br/>
+          <button class="view-details-btn">View Details</button>
+        </div>
+      `;
+
+      // Append to submitted records section
+      const recordsSection = document.querySelector('#records .panel');
+      recordsSection.appendChild(newRecord);
+
+      // Save the new record to localStorage for borrower dashboard
+      let submittedRecords = JSON.parse(localStorage.getItem('submittedRecords')) || [];
+      submittedRecords.push({
+        borrowerName,
+        loanAmount,
+        loanStartDate,
+        maturityDate,
+        loanStatus,
+        assetRecords,
+        balanceSheet,
+        existingLiabilities,
+        transactionId: `TXN${Date.now()}`,
+        status: 'pending'
+      });
+      localStorage.setItem('submittedRecords', JSON.stringify(submittedRecords));
+
+      // Clear form inputs
+      form.querySelectorAll('input, select, textarea').forEach(input => {
+        if (input.tagName.toLowerCase() === 'select') {
+          input.selectedIndex = 0;
+        } else {
+          input.value = '';
+        }
+      });
+
+      // Switch to Submitted Records tab
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.querySelector('.tabs button[onclick*="records"]').classList.add('active');
+      document.getElementById('records').classList.add('active');
+    });
+  </script>
+</body>
+</html>
