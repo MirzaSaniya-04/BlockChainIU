@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlockchainIU - Secure Financial Data Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="sample-css.css" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <div class="logo">🔗 BlockchainIU</div>
+    <div class="nav-actions">
+      <button class="login-btn" onclick="openModal('login')">Login</button>
+      <button class="get-started-btn">Get Started</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Secure Financial Data Management</h1>
+    <p>Revolutionary blockchain technology for transparent, secure, and tamper-proof recording of loan information and financial records in India’s insolvency ecosystem.</p>
+    <div class="hero-buttons">
+      <button class="start-recording-btn" onclick="openModal('recording')">Start Secure Recording</button>
+      <button class="portal-btn">Access Your Portal</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Why Choose BlockchainIU?</h2>
+    <div class="features">
+      <div class="feature">🔐<br/><strong >Blockchain Storage</strong></br>All financial records are stored immutably on blockchain with cryptographic security.</div>
+      <div class="feature">🔍<br/><strong>Transparent Verification</strong></br>Real-time verification process between creditors and borrowers with full audit trails.</div>
+      <div class="feature">👥<br/><strong>Multi-Role Access</strong></br>Role-based authentication for Creditors, Borrowers, and Admin authorities.</div>
+      <div class="feature">🛡<br/><strong>Tamper-Proof Records</strong></br>End-to-end data integrity ensuring records cannot be altered or manipulated.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Multi-Role Access System</h2>
+    <div class="roles">
+      <div class="role"><strong>Creditor</strong><br/> Submit loan records<br> Manage track status</br> View responses.</div>
+      <div class="role"><strong>Borrower</strong><br/>Review loan data</br> confirm records</br> manage info.</div>
+      <div class="role"><strong>Admin</strong><br/>Audit logs </br>monitor systems</br> generate reports.</div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Ready to Transform Your Financial Data Management?</h2>
+    <p>Join the future of secure, transparent financial record keeping</p>
+    <button>Get Started Today</button>
+  </section>
+
+  <footer>
+    © BlockchainIU<br/>
+    Securing India’s financial ecosystem with blockchain technology
+  </footer>
+
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal" id="loginModal">
+      <h3>🔐 Secure Login</h3>
+      <p>Access your BlockchainIU portal with your credentials</p>
+      <input type="email" placeholder="your.email@company.com">
+      <input type="password" placeholder="Enter your password">
+      <select>
+        <option>Choose your role</option>
+        <option>Creditor</option>
+        <option>Borrower</option>
+        <option>Admin</option>
+      </select>
+      <div style="font-size: 0.85rem; margin-top: 0.5rem;">
+        <strong>Demo Credentials:</strong><br/>
+        Creditor: creditor@hdfc.com / demo123<br/>
+        Borrower: borrower@reliance.com / demo123<br/>
+        Admin: admin@iu.gov.in / demo123
+      </div>
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        <button class="login-confirm">Login Securely</button>
+      </div>
+    </div>
+    <div class="modal" id="recordingModal" style="display: none;">
+      <h3>📝 Register for BlockchainIU</h3>
+      <p>Create your secure account to access the blockchain information utility system</p>
+    
+      <div style="display: flex; gap: 0.5rem;">
+        <input type="text" placeholder="First Name *" style="flex: 1;">
+        <input type="text" placeholder="Last Name *" style="flex: 1;">
+      </div>
+    
+      <input type="email" placeholder="Email Address *">
+      <input type="tel" placeholder="Phone Number">
+    
+      <select>
+        <option>Select your role *</option>
+        <option>Creditor</option>
+        <option>Borrower</option>
+        <option>Admin</option>
+      </select>
+    
+      <input type="text" placeholder="Organization Name *">
+      <textarea placeholder="Organization Address" rows="3"></textarea>
+      <input type="text" placeholder="Account/Registration Number">
+      
+      <select>
+        <option>Select verification type</option>
+        <option>Incorporation Certificate</option>
+        <option>GST Registration</option>
+        <option>Government License</option>
+      </select>
+    
+      <div style="font-size: 0.85rem; background: #fff8dc; border: 1px solid #facc15; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        <strong>Important Notice:</strong><br/>
+        All registrations are subject to verification. Only authorized financial institutions, corporate entities, and government authorities will be approved. Verification typically takes 24–48 hours.
+      </div>
+    
+      <div class="modal-buttons" style="margin-top: 1rem;">
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        <button class="login-confirm">Submit Application</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(type) {
+      const overlay = document.getElementById('modalOverlay');
+      const loginModal = document.getElementById('loginModal');
+      const recordingModal = document.getElementById('recordingModal');
+  
+      overlay.style.display = 'flex';
+      if (type === 'recording') {
+        loginModal.style.display = 'none';
+        recordingModal.style.display = 'block';
+      } else {
+        recordingModal.style.display = 'none';
+        loginModal.style.display = 'block';
+      }
+    }
+  
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    // Login logic
+    document.querySelector('.login-confirm').addEventListener('click', () => {
+      const email = document.querySelector('#loginModal input[type="email"]').value.trim();
+      const password = document.querySelector('#loginModal input[type="password"]').value.trim();
+      const roleSelect = document.querySelector('#loginModal select');
+      const role = roleSelect.options[roleSelect.selectedIndex].text;
+
+      const demoCredentials = {
+        'Creditor': { email: 'creditor@hdfc.com', password: 'demo123', redirect: 'creditor-dashboard.html' },
+        'Borrower': { email: 'borrower@reliance.com', password: 'demo123', redirect: 'borrower-dashboard.html' },
+        'Admin': { email: 'admin@iu.gov.in', password: 'demo123', redirect: 'admin-dashboard.html' }
+      };
+
+      if (demoCredentials[role] && email === demoCredentials[role].email && password === demoCredentials[role].password) {
+        // Save login state in localStorage
+        localStorage.setItem('loggedInUser', JSON.stringify({ email, role }));
+        window.location.href = demoCredentials[role].redirect;
+      } else {
+        alert('Invalid credentials or role. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
