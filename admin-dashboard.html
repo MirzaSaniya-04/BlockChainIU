@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - BlockchainIU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fa;
+  color: #111827;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+nav.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.nav-links a {
+  margin-left: 1rem;
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #1e40af;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+main.container {
+  padding: 2rem 3rem;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.card {
+  background-color: #fff;
+  padding: 2rem 1.75rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
+  font-size: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(30, 64, 175, 0.2);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #1e40af;
+}
+
+.card-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.75rem;
+  color: #2563eb;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-tabs .tab {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: #e0e7ff;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e40af;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dashboard-tabs .tab:hover {
+  background-color: #c7d2fe;
+}
+
+.dashboard-tabs .tab.active {
+  background-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+}
+
+.dashboard-content > div {
+  display: none;
+}
+
+.dashboard-content > div.active {
+  display: block;
+}
+
+.recent-activity ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.recent-activity li {
+  background-color: #fff;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.recent-activity li:hover {
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+}
+
+.status {
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.status.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status.confirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.alert-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.alert-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.alert-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.all-records, .analytics, .reports {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  min-height: 200px;
+}
+  </style>
+</head>
+<body>
+  
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="logo"><strong>🔗 BlockchainIU</strong></div>
+    
+    <button id="logoutBtn" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 8px; background: #2563eb; color: white; cursor: pointer;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container dashboard-container">
+    <h1>Admin Dashboard</h1>
+    <p>Information Utility Authority - Monitor and audit blockchain records</p>
+
+    <section class="overview-cards">
+      <div class="card">
+        <h3>Total Records</h3>
+        <p class="card-number">5</p>
+        <p>On blockchain</p>
+      </div>
+      <div class="card">
+        <h3>Pending Review</h3>
+        <p class="card-number">2</p>
+        <p>Awaiting confirmation</p>
+      </div>
+      <div class="card">
+        <h3>Verified Records</h3>
+        <p class="card-number">2</p>
+        <p>Successfully confirmed</p>
+      </div>
+      <div class="card">
+        <h3>System Health</h3>
+        <p class="card-number">99.9%</p>
+        <p>Blockchain uptime</p>
+      </div>
+    </section>
+
+    <section class="dashboard-tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="all-records">All Records</button>
+      <button class="tab" data-tab="analytics">Analytics</button>
+      <button class="tab" data-tab="reports">Reports</button>
+    </section>
+
+    <section class="dashboard-content">
+      <div id="overview" class="active">
+        <div class="recent-activity">
+          <h2>Recent Activity</h2>
+          <ul>
+            <li>
+              <strong>HDFC Bank Ltd → Reliance Capital Ltd</strong><br />
+              ₹500 Crore • 2024-01-15
+              <span class="status pending">Pending Confirmation</span>
+            </li>
+            <li>
+              <strong>HDFC Bank Ltd → Jet Airways India Ltd</strong><br />
+              ₹250 Crore • 2024-01-10
+              <span class="status confirmed">Confirmed</span>
+            </li>
+            <li>
+              <strong>Axis Bank Ltd → Videocon Industries Ltd</strong><br />
+              ₹800 Crore • 2024-01-08
+              <span class="status rejected">Rejected</span>
+            </li>
+            <li>
+              <strong>State Bank of India → Reliance Capital Ltd</strong><br />
+              ₹250 Crore • 2024-01-18
+              <span class="status pending">Pending Confirmation</span>
+            </li>
+            <li>
+              <strong>ICICI Bank Ltd → Reliance Capital Ltd</strong><br />
+              ₹180 Crore • 2024-01-11
+              <span class="status confirmed">Confirmed</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="system-alerts">
+          <h2>System Alerts</h2>
+          <div class="alert alert-warning">
+            <strong>High Volume Alert</strong><br />
+            15 records pending review
+          </div>
+          <div class="alert alert-success">
+            <strong>Security Status: Normal</strong><br />
+            All systems operational
+          </div>
+          <div class="alert alert-info">
+            <strong>Monthly Growth</strong><br />
+            25% increase in submissions
+          </div>
+        </div>
+      </div>
+
+      <div id="all-records" class="all-records" style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+        <h2>Blockchain Records Audit</h2>
+        <p>Search and filter all loan records on the blockchain</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <input type="text" placeholder="Search by creditor, borrower, or transaction ID..." style="flex: 1; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 0.95rem;" />
+          <select style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 0.95rem;">
+            <option>All Status</option>
+            <option>Pending Confirmation</option>
+            <option>Confirmed</option>
+            <option>Rejected</option>
+          </select>
+          <select style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 0.95rem;">
+            <option>Last 30 days</option>
+            <option>Last 60 days</option>
+            <option>Last 90 days</option>
+          </select>
+          <button style="padding: 0.5rem 1rem; border-radius: 8px; border: none; background: #2563eb; color: white; font-weight: 600; cursor: pointer;">Export Data</button>
+        </div>
+      <div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+          <thead>
+            <tr style="background-color: #e0e7ff; color: #1e40af; text-align: left;">
+              <th style="padding: 0.75rem 1rem;">Creditor → Borrower</th>
+              <th style="padding: 0.75rem 1rem;">Amount</th>
+              <th style="padding: 0.75rem 1rem;">Submitted</th>
+              <th style="padding: 0.75rem 1rem;">Type</th>
+              <th style="padding: 0.75rem 1rem;">Blockchain Hash</th>
+              <th style="padding: 0.75rem 1rem;">Status</th>
+              <th style="padding: 0.75rem 1rem;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">HDFC Bank Ltd → Reliance Capital Ltd<br/><small>Transaction ID: TXN001</small></td>
+              <td style="padding: 0.75rem 1rem;">₹500 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-15</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x1a2b3c4d...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #fef3c7; color: #92400e; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Pending Confirmation</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">HDFC Bank Ltd → Jet Airways India Ltd<br/><small>Transaction ID: TXN002</small></td>
+              <td style="padding: 0.75rem 1rem;">₹250 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-10</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x2b3c4d5e...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Confirmed</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">Axis Bank Ltd → Videocon Industries Ltd<br/><small>Transaction ID: TXN003</small></td>
+              <td style="padding: 0.75rem 1rem;">₹800 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-08</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x3c4d5e6f...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #fee2e2; color: #991b1b; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Rejected</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">State Bank of India → Reliance Capital Ltd<br/><small>Transaction ID: TXN004</small></td>
+              <td style="padding: 0.75rem 1rem;">₹250 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-18</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x4d5e6f78...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #fef3c7; color: #92400e; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Pending Confirmation</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">ICICI Bank Ltd → Reliance Capital Ltd<br/><small>Transaction ID: TXN005</small></td>
+              <td style="padding: 0.75rem 1rem;">₹180 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-11</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x5e6f7890...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Confirmed</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">Axis Bank Ltd → Videocon Industries Ltd<br/><small>Transaction ID: TXN003</small></td>
+              <td style="padding: 0.75rem 1rem;">₹800 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-08</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x3c4d5e6f...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Rejected</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">State Bank of India → Reliance Capital Ltd<br/><small>Transaction ID: TXN004</small></td>
+              <td style="padding: 0.75rem 1rem;">₹250 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-08</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x4d5e6f78...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Pending Confirmation</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem 1rem; font-weight: 700;">ICICI Bank Ltd → Reliance Capital Ltd<br/><small>Transaction ID: TXN005</small></td>
+              <td style="padding: 0.75rem 1rem;">₹180 Crore</td>
+              <td style="padding: 0.75rem 1rem;">2024-01-11</td>
+              <td style="padding: 0.75rem 1rem;">Loan Record</td>
+              <td style="padding: 0.75rem 1rem;"><a href="#">0x5e6f7890...</a></td>
+              <td style="padding: 0.75rem 1rem;"><span style="background-color: #d1fae5; color: #065f46; padding: 0.3rem 0.6rem; border-radius: 12px; font-weight: 700;">Confirmed</span></td>
+              <td style="padding: 0.75rem 1rem;"><button class="view-details-btn">Audit Details</button></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      </div>
+      <div id="analytics" class="analytics">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 300px;">
+            <h2>Transaction Volume</h2>
+            <p>Monthly transaction trends</p>
+            <div style="background: #fff; border: 2px dashed #ccc; border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; color: #999; font-weight: 600;">
+              Analytics charts would be rendered here
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 300px;">
+            <h2>Institution Performance</h2>
+            <p>Creditor and borrower activity</p>
+            <div style="background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>HDFC Bank Ltd</span>
+                <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">Active</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>State Bank of India</span>
+                <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">Active</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Reliance Capital Ltd</span>
+                <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">Responsive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="reports" class="reports">
+        <h2>Generate Compliance Report</h2>
+        <p>Create regulatory reports for authorities</p>
+        <form>
+          <label for="report-type">Report Type</label>
+          <select id="report-type" name="report-type" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem;">
+            <option>Monthly Summary</option>
+            <option>Quarterly Summary</option>
+            <option>Annual Summary</option>
+          </select>
+          <fieldset style="margin-bottom: 1rem;">
+            <legend>Include Data</legend>
+            <label><input type="checkbox" checked /> Verified Records</label><br />
+            <label><input type="checkbox" checked /> Pending Records</label><br />
+            <label><input type="checkbox" /> Rejected Records</label>
+          </fieldset>
+          <button type="submit" style="background: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Generate Report</button>
+        </form>
+        <h2>System Health Report</h2>
+        <p>Blockchain and system performance metrics</p>
+        <div style="background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Blockchain Integrity</span>
+            <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">100%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Network Uptime</span>
+            <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">99.9%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Transaction Success Rate</span>
+            <span style="background: #28a745; color: white; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">99.7%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Average Response Time</span>
+            <span style="background: #e2e6ea; border-radius: 12px; padding: 0 8px; font-size: 0.85rem;">2.3s</span>
+          </div>
+          <button id="downloadReportBtn" style="margin-top: 1rem; width: 100%; padding: 0.5rem; border-radius: 8px; border: none; background: #2563eb; color: white; cursor: pointer;">Download System Report</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll('.dashboard-tabs .tab');
+    const contents = document.querySelectorAll('.dashboard-content > div');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const target = tab.getAttribute('data-tab');
+        contents.forEach(content => {
+          if (content.id === target) {
+            content.classList.add('active');
+          } else {
+            content.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    // Check login state and role
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (!loggedInUser || loggedInUser.role !== 'Admin') {
+      alert('Unauthorized access. Please login as Admin.');
+      window.location.href = 'index.html';
+    }
+
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
