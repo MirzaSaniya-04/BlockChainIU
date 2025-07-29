@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Borrower Dashboard - BlockchainIU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafc;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    nav.navbar {
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-links a {
+      margin-left: 1rem;
+      padding: 0.5rem 1.2rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #1a1a1a;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .nav-links a:hover {
+      background: #e2e8f0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    main.container {
+      padding: 2rem;
+    }
+    h1, h2, h3 {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .overview-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 1.5rem 1.25rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    .card-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0.25rem 0 0.5rem;
+      color: #2563eb;
+    }
+    .status {
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .status.pending-review { background-color: #ffeeba; color: #856404; }
+    .status.confirmed { background-color: #d4edda; color: #155724; }
+    .status.rejected { background-color: #f8d7da; color: #721c24; }
+    .dashboard-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .dashboard-tabs .tab {
+      padding: 10px 20px;
+      border: none;
+      background: #e2e6ea;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #1c62a0;
+      transition: background 0.2s ease;
+    }
+    .dashboard-tabs .tab:hover {
+      background: #d1d5db;
+    }
+    .dashboard-tabs .tab.active {
+      background: #2563eb;
+      color: white;
+    }
+    .loan-record {
+      border: 1px solid #e2e6ea;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .action-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+      transition: background 0.2s ease;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #b02a37;
+    }
+    .btn-success {
+      background-color: #28a745;
+    }
+    .btn-success:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="logo"><strong>🔗 BlockchainIU</strong></div>
+    <button id="logoutBtn" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 8px; background: #2563eb; color: white; cursor: pointer;">Logout</button>
+      </div>
+  </nav>
+
+  <main class="container dashboard-container">
+    <h1>Borrower Dashboard</h1>
+    <p>Reliance Capital Ltd - Review and manage submitted loan records</p>
+
+    <section class="overview-cards">
+      <div class="card">
+        <h3>Pending Review</h3>
+        <p class="card-number">2</p>
+        <p>Requires your attention</p>
+      </div>
+      <div class="card">
+        <h3>Confirmed</h3>
+        <p class="card-number">2</p>
+        <p>Successfully verified</p>
+      </div>
+      <div class="card">
+        <h3>Rejected</h3>
+        <p class="card-number">1</p>
+        <p>Disputed records</p>
+      </div>
+      <div class="card">
+        <h3>Total Exposure</h3>
+        <p class="card-number">₹1.2K Cr</p>
+        <p>Across all creditors</p>
+      </div>
+    </section>
+
+  <style>
+    .status {
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .status.pending-review { background-color: #ffeeba; color: #856404; }
+    .status.confirmed { background-color: #d4edda; color: #155724; }
+    .status.rejected { background-color: #f8d7da; color: #721c24; }
+    .dashboard-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .dashboard-tabs .tab {
+      padding: 10px 20px;
+      border: none;
+      background: #e2e6ea;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6c757d;
+    }
+    .dashboard-tabs .tab.active {
+      background: #007bff;
+      color: white;
+    }
+    .loan-record {
+      border: 1px solid #e2e6ea;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: white;
+    }
+    .action-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-success {
+      background-color: #28a745;
+    }
+  </style>
+
+  <section class="dashboard-tabs">
+    <button class="tab active" data-tab="pending-review">Pending Review (2)</button>
+    <button class="tab" data-tab="confirmed">Confirmed (2)</button>
+    <button class="tab" data-tab="rejected">Rejected (1)</button>
+  </section>
+
+  <section class="dashboard-content">
+    <!-- Pending Review Records -->
+    <div class="loan-record" data-status="pending-review">
+      <h2>HDFC Bank Ltd</h2>
+      <p>Transaction ID: TXN004</p>
+      <p>Submitted Date: 2024-01-15</p>
+      <p>Review Deadline: 2024-01-29</p>
+      <p>Loan Period: 2023-06-15 to 2025-06-15</p>
+      <p>Current Status: Active</p>
+      <span class="status pending-review">Review Required</span>
+      <p>Asset Records: Prime commercial properties in Mumbai and Delhi, machinery worth ₹200 Cr</p>
+      <p>Balance Sheet Summary: Total Assets: ₹1200 Cr, Liabilities: ₹800 Cr, Equity: ₹400 Cr</p>
+      <p>Existing Liabilities: Term loan from SBI: ₹300 Cr, Working capital from ICICI: ₹150 Cr</p>
+      <div class="action-buttons">
+        <button class="btn btn-danger">Reject Record</button>
+        <button class="btn btn-success">Confirm Record</button>
+      </div>
+    </div>
+
+    <div class="loan-record" data-status="pending-review">
+      <h2>State Bank of India</h2>
+      <p>Transaction ID: TXN005</p>
+      <p>Submitted Date: 2024-01-18</p>
+      <p>Review Deadline: 2024-02-01</p>
+      <p>Loan Period: 2023-09-01 to 2026-09-01</p>
+      <p>Current Status: Restructured</p>
+      <span class="status pending-review">Review Required</span>
+      <p>Asset Records: Manufacturing units in Gujarat, inventory worth ₹100 Cr</p>
+      <p>Balance Sheet Summary: Total Assets: ₹800 Cr, Liabilities: ₹600 Cr, Equity: ₹200 Cr</p>
+      <p>Existing Liabilities: Housing loan from HDFC: ₹80 Cr, Equipment financing: ₹120 Cr</p>
+      <div class="action-buttons">
+        <button class="btn btn-danger">Reject Record</button>
+        <button class="btn btn-success">Confirm Record</button>
+      </div>
+    </div>
+
+    <!-- Confirmed Records -->
+    <div class="confirmed-section" style="display:none;">
+      <h3>Confirmed Loan Records</h3>
+      <p>Records you have confirmed and verified</p>
+      <div class="loan-item" data-status="confirmed">
+        <div>
+          <strong>HDFC Bank Ltd</strong><br/>
+          Transaction ID: TXN002<br/>
+          Amount <strong>₹300 Crore</strong><br/>
+          Submitted <strong>2024-01-10</strong><br/>
+          Confirmed <strong>2024-01-12</strong>
+        </div>
+        <div>
+          <span class="status confirmed">Confirmed</span><br/>
+          <button class="view-details-btn"style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+      <div class="loan-item" data-status="confirmed">
+        <div>
+          <strong>ICICI Bank Ltd</strong><br/>
+          Transaction ID: TXN006<br/>
+          Amount <strong>₹180 Crore</strong><br/>
+          Submitted <strong>2024-01-11</strong><br/>
+          Confirmed <strong>2024-01-14</strong>
+        </div>
+        <div>
+          <span class="status confirmed">Confirmed</span><br/>
+          <button class="view-details-btn"style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rejected Records -->
+    <div class="rejected-section" style="display:none;">
+      <h3>Rejected Loan Records</h3>
+      <p>Records you have disputed or rejected</p>
+      <div class="loan-item" data-status="rejected">
+        <div>
+          <strong>Axis Bank Ltd</strong><br/>
+          Transaction ID: TXN003<br/>
+          Amount <strong>₹400 Crore</strong><br/>
+          Submitted <strong>2024-01-08</strong><br/>
+          Rejected <strong>2024-01-11</strong>
+        </div>
+        <div>
+          <span class="status rejected">Rejected</span><br/>
+          <button class="view-details-btn"style="background-color: #2563eb; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;">View Details</button>
+        </div>
+      </div>
+      <div class="rejection-reason" style="background-color: #f8d7da; color: #721c24; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid #f5c6cb;">
+        <strong>Rejection Reason:</strong> Incorrect loan amount reported. Actual disbursed amount was ₹350 Crore.
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.dashboard-tabs .tab');
+    const pendingRecords = document.querySelectorAll('.loan-record[data-status="pending-review"]');
+    const confirmedSection = document.querySelector('.confirmed-section');
+    const rejectedSection = document.querySelector('.rejected-section');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const selectedStatus = tab.getAttribute('data-tab');
+
+        // Show/hide sections based on selected tab
+        if (selectedStatus === 'pending-review') {
+          pendingRecords.forEach(record => record.style.display = 'block');
+          confirmedSection.style.display = 'none';
+          rejectedSection.style.display = 'none';
+        } else if (selectedStatus === 'confirmed') {
+          pendingRecords.forEach(record => record.style.display = 'none');
+          confirmedSection.style.display = 'block';
+          rejectedSection.style.display = 'none';
+        } else if (selectedStatus === 'rejected') {
+          pendingRecords.forEach(record => record.style.display = 'none');
+          confirmedSection.style.display = 'none';
+          rejectedSection.style.display = 'block';
+        }
+      });
+    });
+
+    // Handle Confirm and Reject buttons in pending review records
+    const dashboardContent = document.querySelector('.dashboard-content');
+    dashboardContent.addEventListener('click', (event) => {
+      if (event.target.classList.contains('btn-success') || event.target.classList.contains('btn-danger')) {
+        const loanRecord = event.target.closest('.loan-record');
+        if (!loanRecord) return;
+
+        if (event.target.classList.contains('btn-success')) {
+          // Confirm record: move to confirmed section
+          loanRecord.style.display = 'none';
+          confirmedSection.appendChild(createConfirmedRecord(loanRecord));
+        } else if (event.target.classList.contains('btn-danger')) {
+          // Reject record: move to rejected section
+          loanRecord.style.display = 'none';
+          rejectedSection.appendChild(createRejectedRecord(loanRecord));
+        }
+
+        // Update tab counts
+        updateTabCounts();
+      }
+    });
+
+    function createConfirmedRecord(pendingRecord) {
+      const confirmedRecord = document.createElement('div');
+      confirmedRecord.className = 'loan-item';
+      confirmedRecord.setAttribute('data-status', 'confirmed');
+      confirmedRecord.innerHTML = `
+        <div>
+          <strong>${pendingRecord.querySelector('h2').textContent}</strong><br/>
+          Transaction ID: ${pendingRecord.querySelector('p:nth-of-type(1)').textContent.split(': ')[1]}<br/>
+          Amount <strong>${pendingRecord.querySelector('p:nth-of-type(5)').textContent}</strong><br/>
+          Submitted <strong>${pendingRecord.querySelector('p:nth-of-type(2)').textContent.split(': ')[1]}</strong><br/>
+          Confirmed <strong>${new Date().toISOString().split('T')[0]}</strong>
+        </div>
+        <div>
+          <span class="status confirmed">Confirmed</span><br/>
+          <button class="view-details-btn">View Details</button>
+        </div>
+      `;
+      return confirmedRecord;
+    }
+
+    function createRejectedRecord(pendingRecord) {
+      const rejectedRecord = document.createElement('div');
+      rejectedRecord.className = 'loan-item';
+      rejectedRecord.setAttribute('data-status', 'rejected');
+      rejectedRecord.innerHTML = `
+        <div>
+          <strong>${pendingRecord.querySelector('h2').textContent}</strong><br/>
+          Transaction ID: ${pendingRecord.querySelector('p:nth-of-type(1)').textContent.split(': ')[1]}<br/>
+          Amount <strong>${pendingRecord.querySelector('p:nth-of-type(5)').textContent}</strong><br/>
+          Submitted <strong>${pendingRecord.querySelector('p:nth-of-type(2)').textContent.split(': ')[1]}</strong><br/>
+          Rejected <strong>${new Date().toISOString().split('T')[0]}</strong>
+        </div>
+        <div>
+          <span class="status rejected">Rejected</span><br/>
+          <button class="view-details-btn">View Details</button>
+        </div>
+        <div class="rejection-reason" style="background-color: #f8d7da; color: #721c24; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid #f5c6cb;">
+          <strong>Rejection Reason:</strong> Please provide a reason.
+        </div>
+      `;
+      return rejectedRecord;
+    }
+
+    function updateTabCounts() {
+      const pendingCount = document.querySelectorAll('.loan-record[data-status="pending-review"]').length;
+      const confirmedCount = document.querySelectorAll('.loan-item[data-status="confirmed"]').length;
+      const rejectedCount = document.querySelectorAll('.loan-item[data-status="rejected"]').length;
+
+      tabs.forEach(tab => {
+        const status = tab.getAttribute('data-tab');
+        if (status === 'pending-review') {
+          tab.textContent = `Pending Review (${pendingCount})`;
+        } else if (status === 'confirmed') {
+          tab.textContent = `Confirmed (${confirmedCount})`;
+        } else if (status === 'rejected') {
+          tab.textContent = `Rejected (${rejectedCount})`;
+        }
+      });
+    }
+
+    // Initialize tab counts on page load
+    updateTabCounts();
+
+    // Check login state and role
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (!loggedInUser || loggedInUser.role !== 'Borrower') {
+      alert('Unauthorized access. Please login as Borrower.');
+      window.location.href = 'index.html';
+    }
+
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'index.html';
+    });
+  </script>
+  </main>
+</body>
+</html>
